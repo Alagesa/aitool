@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Title Generator</title>
+    <title>Answer Generator</title>
     <style>
 body {
     font-family: Arial, sans-serif;
@@ -12,34 +12,46 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #121212;
+    color: #ffffff;
+    overflow: hidden;
 }
 
 .container {
     text-align: center;
-    background: #fff;
-    padding: 2rem;
+    background: #1e1e1e;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 textarea {
-    width: 80%;
+    width: 100%;
     height: 100px;
     margin-bottom: 1rem;
     padding: 0.5rem;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #555;
+    box-sizing: border-box;
+    resize: none;
+    background-color: #333;
+    color: #ffffff;
 }
 
 button {
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 5px;
     background-color: #007BFF;
     color: white;
     font-size: 1rem;
     cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0.5rem;
 }
 
 button:hover {
@@ -48,22 +60,79 @@ button:hover {
 
 h2 {
     margin-top: 2rem;
+    font-size: 1.25rem;
+    color: #ffffff;
 }
 
+.output-container {
+    position: relative;
+    width: 100%;
+}
 
+p {
+    font-size: 1rem;
+    color: #ffffff;
+    white-space: pre-line; /* Ensures new lines are respected */
+    text-align: left;
+    border: 1px solid #555;
+    padding: 1rem;
+    border-radius: 5px;
+    background: #333;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 200px;
+    box-sizing: border-box;
+}
+
+.hidden {
+    display: none;
+}
+
+.copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.copy-button:hover {
+    background-color: #0056b3;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Answer Generator</h1>
-        <textarea id="description" placeholder="What ai?"></textarea>
-        <button id="generate">Generate</button>
-        <h2>Generated:</h2>
-        <p id="title"></p>
+        <textarea id="description" placeholder="What do you want to ask?"></textarea>
+        <div class="button-container">
+            <button id="generate">Generate</button>
+            <button id="clear">Clear</button>
+        </div>
+        <h2 class="hidden">Generated Answer:</h2>
+        <div class="output-container hidden">
+            <p id="title"></p>
+            <button id="copy" class="copy-button">Copy</button>
+        </div>
     </div>
     <script>
 document.getElementById('generate').addEventListener('click', async () => {
     const description = document.getElementById('description').value;
+    const titleElement = document.getElementById('title');
+    const h2Element = document.querySelector('h2');
+    const outputContainer = document.querySelector('.output-container');
 
     if (!description) {
         alert('Please enter a question.');
@@ -117,15 +186,53 @@ document.getElementById('generate').addEventListener('click', async () => {
             console.log('Candidates are not an array or undefined.');
         }
 
-        // Replace new lines with HTML line breaks for better readability
-        const formattedTitle = generatedTitle.replace(/\n/g, '<br>');
-        document.getElementById('title').innerHTML = formattedTitle;
+        // Update the UI with the generated title line by line
+        h2Element.classList.remove('hidden');
+        outputContainer.classList.remove('hidden');
+        titleElement.innerHTML = ''; // Clear any previous content
+
+        // Display the generated text line by line
+        const displayTextLineByLine = (text) => {
+            const lines = text.split('\n');
+            let i = 0;
+            const intervalId = setInterval(() => {
+                if (i < lines.length) {
+                    titleElement.innerHTML += lines[i] + '<br>';
+                    i++;
+                } else {
+                    clearInterval(intervalId);
+                }
+            }, 100); // Adjust the delay (in milliseconds) as needed
+        };
+
+        displayTextLineByLine(generatedTitle);
     } catch (error) {
         console.error('Error:', error);
         alert('An error occurred while generating the title. Please try again.');
     }
 });
 
+document.getElementById('clear').addEventListener('click', () => {
+    document.getElementById('description').value = '';
+    const titleElement = document.getElementById('title');
+    const h2Element = document.querySelector('h2');
+    const outputContainer = document.querySelector('.output-container');
+    titleElement.innerHTML = '';
+    titleElement.classList.add('hidden');
+    h2Element.classList.add('hidden');
+    outputContainer.classList.add('hidden');
+});
+
+document.getElementById('copy').addEventListener('click', () => {
+    const titleElement = document.getElementById('title');
+    const textToCopy = titleElement.innerText;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        alert('Copied to clipboard!');
+    }).catch(err => {
+        console.error('Error copying text: ', err);
+        alert('Failed to copy text.');
+    });
+});
     </script>
 </body>
 </html>
