@@ -5,112 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Answer Generator</title>
     <style>
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #121212;
-    color: #ffffff;
-    overflow: hidden;
-}
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+            color: #ffffff;
+            overflow: hidden;
+        }
 
-.container {
-    text-align: center;
-    background: #1e1e1e;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .container {
+            text-align: center;
+            background: #1e1e1e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-textarea {
-    width: 100%;
-    height: 100px;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #555;
-    box-sizing: border-box;
-    resize: none;
-    background-color: #333;
-    color: #ffffff;
-}
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #555;
+            box-sizing: border-box;
+            resize: none;
+            background-color: #333;
+            color: #ffffff;
+        }
 
-button {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #007BFF;
-    color: white;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 0.5rem;
-}
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0.5rem;
+        }
 
-button:hover {
-    background-color: #0056b3;
-}
+        button:hover {
+            background-color: #0056b3;
+        }
 
-h2 {
-    margin-top: 2rem;
-    font-size: 1.25rem;
-    color: #ffffff;
-}
+        h2 {
+            margin-top: 2rem;
+            font-size: 1.25rem;
+            color: #ffffff;
+        }
 
-.output-container {
-    position: relative;
-    width: 100%;
-}
+        .output-container {
+            position: relative;
+            width: 100%;
+        }
 
-p {
-    font-size: 1rem;
-    color: #ffffff;
-    white-space: pre-line; /* Ensures new lines are respected */
-    text-align: left;
-    border: 1px solid #555;
-    padding: 1rem;
-    border-radius: 5px;
-    background: #333;
-    width: 100%;
-    overflow-y: auto;
-    max-height: 200px;
-    box-sizing: border-box;
-}
+        p {
+            font-size: 1rem;
+            color: #ffffff;
+            white-space: pre-line; /* Ensures new lines are respected */
+            text-align: left;
+            border: 1px solid #555;
+            padding: 1rem;
+            border-radius: 5px;
+            background: #333;
+            width: 100%;
+            overflow-y: auto;
+            max-height: 200px;
+            box-sizing: border-box;
+        }
 
-.hidden {
-    display: none;
-}
+        .hidden {
+            display: none;
+        }
 
-.copy-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #007BFF;
-    color: white;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-.copy-button:hover {
-    background-color: #0056b3;
-}
+        .copy-button:hover {
+            background-color: #0056b3;
+        }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
+        .button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Spinner styles */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #007BFF;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -123,116 +144,124 @@ p {
         </div>
         <h2 class="hidden">Generated Answer:</h2>
         <div class="output-container hidden">
+            <div id="spinner" class="spinner hidden"></div>
             <p id="title"></p>
             <button id="copy" class="copy-button">Copy</button>
         </div>
     </div>
     <script>
-document.getElementById('generate').addEventListener('click', async () => {
-    const description = document.getElementById('description').value;
-    const titleElement = document.getElementById('title');
-    const h2Element = document.querySelector('h2');
-    const outputContainer = document.querySelector('.output-container');
+        document.getElementById('generate').addEventListener('click', async () => {
+            const description = document.getElementById('description').value;
+            const titleElement = document.getElementById('title');
+            const h2Element = document.querySelector('h2');
+            const outputContainer = document.querySelector('.output-container');
+            const spinner = document.getElementById('spinner');
 
-    if (!description) {
-        alert('Please enter a question.');
-        return;
-    }
+            if (!description) {
+                alert('Please enter a question.');
+                return;
+            }
 
-    try {
-        const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=AIzaSyBGOKXUnMgfNjaPyriGk4PJk5CRUdqIApk', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                contents: [
-                    {
-                        role: 'user',
-                        parts: [{ text: description }]
+            try {
+                // Show spinner and clear previous content
+                spinner.classList.remove('hidden');
+                h2Element.classList.add('hidden');
+                outputContainer.classList.remove('hidden');
+                titleElement.innerHTML = '';
+
+                const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=AIzaSyBGOKXUnMgfNjaPyriGk4PJk5CRUdqIApk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                role: 'user',
+                                parts: [{ text: description }]
+                            }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log('Response Data:', JSON.stringify(data, null, 2)); // Log the entire response for debugging
+
+                let generatedTitle = 'No answer generated';
+
+                if (data.candidates && Array.isArray(data.candidates)) {
+                    console.log('Candidates:', data.candidates);
+                    if (data.candidates.length > 0) {
+                        const firstCandidate = data.candidates[0];
+                        console.log('First Candidate:', firstCandidate);
+                        if (firstCandidate.content && firstCandidate.content.parts && Array.isArray(firstCandidate.content.parts)) {
+                            console.log('Content Parts:', firstCandidate.content.parts);
+                            if (firstCandidate.content.parts.length > 0) {
+                                generatedTitle = firstCandidate.content.parts[0].text;
+                            } else {
+                                console.log('No parts in content.');
+                            }
+                        } else {
+                            console.log('Content parts are not an array or undefined.');
+                        }
+                    } else {
+                        console.log('Candidates array is empty.');
                     }
-                ]
-            })
+                } else {
+                    console.log('Candidates are not an array or undefined.');
+                }
+
+                // Hide spinner and show the content
+                spinner.classList.add('hidden');
+                h2Element.classList.remove('hidden');
+
+                // Display the generated text line by line
+                const displayTextLineByLine = (text) => {
+                    const lines = text.split('\n');
+                    let i = 0;
+                    const intervalId = setInterval(() => {
+                        if (i < lines.length) {
+                            titleElement.innerHTML += lines[i] + '<br>';
+                            i++;
+                        } else {
+                            clearInterval(intervalId);
+                        }
+                    }, 100); // Adjust the delay (in milliseconds) as needed
+                };
+
+                displayTextLineByLine(generatedTitle);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while generating the title. Please try again.');
+            }
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+        document.getElementById('clear').addEventListener('click', () => {
+            document.getElementById('description').value = '';
+            const titleElement = document.getElementById('title');
+            const h2Element = document.querySelector('h2');
+            const outputContainer = document.querySelector('.output-container');
+            const spinner = document.getElementById('spinner');
+            titleElement.innerHTML = '';
+            h2Element.classList.add('hidden');
+            outputContainer.classList.add('hidden');
+            spinner.classList.add('hidden');
+        });
 
-        const data = await response.json();
-        console.log('Response Data:', JSON.stringify(data, null, 2)); // Log the entire response for debugging
-
-        let generatedTitle = 'No answer generated';
-
-        if (data.candidates && Array.isArray(data.candidates)) {
-            console.log('Candidates:', data.candidates);
-            if (data.candidates.length > 0) {
-                const firstCandidate = data.candidates[0];
-                console.log('First Candidate:', firstCandidate);
-                if (firstCandidate.content && firstCandidate.content.parts && Array.isArray(firstCandidate.content.parts)) {
-                    console.log('Content Parts:', firstCandidate.content.parts);
-                    if (firstCandidate.content.parts.length > 0) {
-                        generatedTitle = firstCandidate.content.parts[0].text;
-                    } else {
-                        console.log('No parts in content.');
-                    }
-                } else {
-                    console.log('Content parts are not an array or undefined.');
-                }
-            } else {
-                console.log('Candidates array is empty.');
-            }
-        } else {
-            console.log('Candidates are not an array or undefined.');
-        }
-
-        // Update the UI with the generated title line by line
-        h2Element.classList.remove('hidden');
-        outputContainer.classList.remove('hidden');
-        titleElement.innerHTML = ''; // Clear any previous content
-
-        // Display the generated text line by line
-        const displayTextLineByLine = (text) => {
-            const lines = text.split('\n');
-            let i = 0;
-            const intervalId = setInterval(() => {
-                if (i < lines.length) {
-                    titleElement.innerHTML += lines[i] + '<br>';
-                    i++;
-                } else {
-                    clearInterval(intervalId);
-                }
-            }, 100); // Adjust the delay (in milliseconds) as needed
-        };
-
-        displayTextLineByLine(generatedTitle);
-    } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while generating the title. Please try again.');
-    }
-});
-
-document.getElementById('clear').addEventListener('click', () => {
-    document.getElementById('description').value = '';
-    const titleElement = document.getElementById('title');
-    const h2Element = document.querySelector('h2');
-    const outputContainer = document.querySelector('.output-container');
-    titleElement.innerHTML = '';
-    titleElement.classList.add('hidden');
-    h2Element.classList.add('hidden');
-    outputContainer.classList.add('hidden');
-});
-
-document.getElementById('copy').addEventListener('click', () => {
-    const titleElement = document.getElementById('title');
-    const textToCopy = titleElement.innerText;
-    navigator.clipboard.writeText(textToCopy).then(() => {
-        alert('Copied to clipboard!');
-    }).catch(err => {
-        console.error('Error copying text: ', err);
-        alert('Failed to copy text.');
-    });
-});
+        document.getElementById('copy').addEventListener('click', () => {
+            const titleElement = document.getElementById('title');
+            const textToCopy = titleElement.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Error copying text: ', err);
+                alert('Failed to copy text.');
+            });
+        });
     </script>
 </body>
 </html>
