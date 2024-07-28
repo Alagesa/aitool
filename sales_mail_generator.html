@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Title Generator</title>
+    <title>Sales Emails Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,7 +84,8 @@
             width: 100%;
             margin-bottom: 1rem;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             justify-content: space-between; /* Align the copy button to the right */
         }
 
@@ -97,9 +98,8 @@
             padding: 1rem;
             border-radius: 5px;
             background: #333;
-            width: 85%;
+            width: 100%;
             box-sizing: border-box;
-            margin-right: 10px; /* Add some space between text and button */
         }
 
         .hidden {
@@ -119,12 +119,6 @@
 
         .copy-button:hover {
             background-color: #0056b3;
-        }
-
-        .button-container {
-            display: flex;
-            justify-content: center;
-            width: 100%;
         }
 
         /* Spinner styles */
@@ -169,20 +163,20 @@
 </head>
 <body>
     <div class="container">
-        <h2>Generate Catchy SEO Titles with Powerful AI</h2>
-        <textarea id="description" placeholder="Enter your topic"></textarea>
+        <h2>Generate sales emails with Powerful AI</h2>
+        <textarea id="description" placeholder="Enter your product"></textarea>
         <div class="button-container">
             <button id="clear">Clear</button>
             <button id="generate">Generate</button>  
         </div>
-        <h2 class="hidden">Generated Catchy SEO Titles</h2>
+        <h2 class="hidden">Generated sales emails</h2>
         <div id="output-container" class="output-container hidden">
             <div id="spinner" class="loader hidden"></div>
         </div>
     </div>
     <script>
         function setPrompt(input) {
-            return "Generate 5 catchy titles for a " + input + " about";
+            return "Generate 5 days high converting sales emails for a " + input + " about";
         }
 
         document.getElementById('generate').addEventListener('click', async () => {
@@ -192,7 +186,7 @@
             let spinner = document.getElementById('spinner');
 
             if (!description) {
-                alert('Please enter your topic.');
+                alert('Please describe your product.');
                 return;
             }
 
@@ -229,7 +223,7 @@
                 const data = await response.json();
                 console.log('Response Data:', JSON.stringify(data, null, 2)); // Log the entire response for debugging
 
-                let generatedTitles = ['No title generated'];
+                let generatedEmails = ['No email generated'];
 
                 if (data.candidates && Array.isArray(data.candidates)) {
                     console.log('Candidates:', data.candidates);
@@ -239,7 +233,7 @@
                         if (firstCandidate.content && firstCandidate.content.parts && Array.isArray(firstCandidate.content.parts)) {
                             console.log('Content Parts:', firstCandidate.content.parts);
                             if (firstCandidate.content.parts.length > 0) {
-                                generatedTitles = firstCandidate.content.parts[0].text.split('\n');
+                                generatedEmails = firstCandidate.content.parts[0].text.split('\n\n'); // Split emails by double newlines
                             } else {
                                 console.log('No parts in content.');
                             }
@@ -258,49 +252,43 @@
                 h2Element.classList.remove('hidden');
                 outputContainer.innerHTML = ''; // Clear the loader
 
-                // Display titles one by one with animation
-                const displayTitle = (title) => {
-                    return new Promise((resolve) => {
-                        const output = document.createElement('div');
-                        output.className = 'output';
+                // Display emails
+                for (const email of generatedEmails) {
+                    const output = document.createElement('div');
+                    output.className = 'output';
 
-                        const p = document.createElement('p');
-                        p.textContent = title;
+                    const p = document.createElement('p');
+                    p.textContent = email;
 
-                        const copyButton = document.createElement('button');
-                        copyButton.className = 'copy-button';
-                        copyButton.textContent = 'Copy';
-                        copyButton.addEventListener('click', () => {
-                            const tempTextarea = document.createElement('textarea');
-                            tempTextarea.value = title;
-                            document.body.appendChild(tempTextarea);
-                            tempTextarea.select();
-                            try {
-                                document.execCommand('copy');
-                                alert('Copied to clipboard!');
-                            } catch (err) {
-                                console.error('Error copying text: ', err);
-                                alert('Failed to copy text.');
-                            }
-                            document.body.removeChild(tempTextarea);
-                        });
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.textContent = 'Copy';
+                    copyButton.addEventListener('click', () => {
+                        const tempTextarea = document.createElement('textarea');
+                        tempTextarea.value = email;
+                        document.body.appendChild(tempTextarea);
+                        tempTextarea.select();
+                        try {
+                            document.execCommand('copy');
+                            alert('Copied to clipboard!');
+                        } catch (err) {
+                            console.error('Error copying text: ', err);
+                            alert('Failed to copy text.');
+                        }
+                        document.body.removeChild(tempTextarea);
 
-                        output.appendChild(p);
-                        output.appendChild(copyButton);
-                        outputContainer.appendChild(output);
-
-                        // Simulate delay for animation effect
-                        setTimeout(resolve, 500);
+                        // Open email composition window
+                        const mailtoLink = `mailto:?subject=Generated%20SEO%20Title&body=${encodeURIComponent(email)}`;
+                        window.location.href = mailtoLink;
                     });
-                };
 
-                // Display each title with a delay for animation effect
-                for (const title of generatedTitles) {
-                    await displayTitle(title);
+                    output.appendChild(p);
+                    output.appendChild(copyButton);
+                    outputContainer.appendChild(output);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert(`An error occurred while generating the title: ${error.message}`);
+                alert(`An error occurred while generating the email: ${error.message}`);
             }
         });
 
