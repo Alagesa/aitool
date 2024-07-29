@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+       
+
+        .container {
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+        }
+
+        .card-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            padding: 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        .card p {
+            color: #bbb;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin-left: 0;
+            }
+
+            .side-menu {
+                width: 100%;
+                height: auto;
+                transform: translateY(-100%);
+            }
+
+            .side-menu.open {
+                transform: translateY(0);
+            }
+
+            .menu-button {
+                top: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+
+    <div class="container">
+        <h1>AI Tools</h1>
+        <div class="card-grid">
+            <div class="card" onclick="location.href='title_generator.html';">
+                <h2>Title Generator</h2>
+                <p>Create catchy titles for articles, blogs, and videos to boost engagement.</p>
+            </div>
+            <div class="card" onclick="location.href='business_idea_generator.html';">
+                <h2>Business Idea Generator</h2>
+                <p>Generate innovative business ideas tailored to your interests and market trends.</p>
+            </div>
+            <div class="card" onclick="location.href='sales_mail_generator.html';">
+                <h2>Sales Mail Generator</h2>
+                <p>Craft persuasive sales emails that convert leads into customers efficiently.</p>
+            </div>
+            <div class="card" onclick="location.href='recipe_generator.html';">
+                <h2>Recipe Generator</h2>
+                <p>Create delicious recipes based on your ingredients or dietary preferences.</p>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

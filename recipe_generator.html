@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cooking Recipe Generator</title>
+    <link rel="stylesheet" href="menu.css">
+    <script src="menu.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -162,6 +164,14 @@
     </style>
 </head>
 <body>
+    <button class="menu-button" onclick="toggleMenu()">☰ Menu</button>
+    <div class="side-menu" id="sideMenu">
+        <br><br><br>
+        <a href="title_generator.html" id="title-generator">Title Generator</a>
+        <a href="business_idea_generator.html" id="business-idea-generator">Business Idea Generator</a>
+        <a href="sales_mail_generator.html" id="sales-mail-generator">Sales Mail Generator</a>
+        <a href="recipe_generator.html" id="recipe-generator">Recipe Generator</a>
+    </div>
     <div class="container">
         <h2>Generate Delicious Recipes with Powerful AI</h2>
         <textarea id="description" placeholder="Describe your ingredients or cuisine"></textarea>
