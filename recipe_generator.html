@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,122 +15,169 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #121212;
+            background-color: #20232A;
             color: #ffffff;
             overflow: hidden;
         }
 
         .container {
             text-align: center;
-            background: #1e1e1e;
+            background: #282C34;
             padding: 2rem;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            width: 100%;
             max-width: 600px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        textarea {
+        .input-container {
             width: 100%;
-            height: 100px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        input {
+            width: calc(100% - 4rem);
             margin-bottom: 1rem;
-            padding: 0.5rem;
-            border-radius: 5px;
+            padding: 0.75rem;
+            border-radius: 10px;
             border: 1px solid #555;
             box-sizing: border-box;
             resize: none;
             background-color: #333;
             color: #ffffff;
+            font-size: 1rem;
+            transition: border 0.3s;
+            flex-grow: 1;
+            overflow: hidden;
+            height: auto;
+            min-height: 2.5rem;
+            max-height: 150px;
         }
 
-        textarea:focus {
-            border: 1px solid #007BFF;
+        input:focus {
+            border: 1px solid #61DAFB;
+            box-shadow: 0 0 10px rgba(97, 218, 251, 0.5);
+            outline: none;
         }
 
         button {
             padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
+            border: 1px solid #61DAFB;
+            border-radius: 10px;
+            background-color: #61DAFB;
+            color: black;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, opacity 0.3s;
             margin: 0.5rem;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        button:hover,
+        button:focus {
+            background-color: #21A1F1;
+            opacity: 0.6;
+        }
+
+        .input-container button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            border-radius: 0 10px 10px 0;
         }
 
         h2 {
             margin-top: 2rem;
-            font-size: 1.25rem;
-            color: #ffffff;
+            font-size: 1.5rem;
+            color: #61DAFB;
         }
 
         .output-container {
             position: relative;
-            width: 90%;
+            width: 100%;
             max-height: 300px;
-            overflow-y: auto; /* Add scrollbar */
-            background: #333;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #333, #555);
             padding: 1rem;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-top: 1rem;
+        }
+
+        .output-header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .output-header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .output-header-buttons button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #61DAFB;
+            font-size: 1.2rem;
+            transition: opacity 0.3s;
+        }
+
+        .output-header-buttons button:hover,
+        .output-header-buttons button:focus {
+            opacity: 0.6;
+        }
+
+        .output-header-buttons i {
+            font-size: 1.2rem;
         }
 
         .output {
-            position: relative;
-            width: 100%;
-            margin-bottom: 1rem;
+            margin-top: 2rem;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            justify-content: space-between; /* Align the copy button to the right */
+        }
+
+        .output-header-container h3 {
+            color: #61DAFB;
         }
 
         p {
             font-size: 1rem;
             color: #ffffff;
-            white-space: pre-line; /* Ensures new lines are respected */
+            white-space: pre-line;
             text-align: left;
             border: 1px solid #555;
             padding: 1rem;
-            border-radius: 5px;
-            background: #333;
+            border-radius: 10px;
+            background: #444;
             width: 100%;
             box-sizing: border-box;
+        }
+
+        .output p strong {
+            font-weight: bold;
+            color: #61DAFB;
         }
 
         .hidden {
             display: none;
         }
 
-        .copy-button {
-            padding: 0.5rem;
-            border: none;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .copy-button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Spinner styles */
         .loader {
             border: 4px solid rgba(255, 255, 255, 0.1);
-            border-left-color: #007BFF;
+            border-left-color: #61DAFB;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
             margin: 1rem auto;
         }
@@ -138,35 +186,132 @@
             0% {
                 transform: rotate(0deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
         }
 
-        /* Scrollbar styles */
+        .spinner-text {
+            font-size: 1rem;
+            color: #61DAFB;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
         .output-container::-webkit-scrollbar {
             width: 8px;
         }
 
         .output-container::-webkit-scrollbar-track {
-            background: #1e1e1e;
+            background: #282C34;
         }
 
         .output-container::-webkit-scrollbar-thumb {
-            background-color: #555;
+            background-color: #61DAFB;
             border-radius: 10px;
-            border: 2px solid #1e1e1e;
+            border: 2px solid #282C34;
         }
 
         .output-container::-webkit-scrollbar-thumb:hover {
-            background-color: #007BFF;
+            background-color: #21A1F1;
+        }
+
+        .menu-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background-color: #61DAFB;
+            color: rgb(0, 0, 0);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+
+        .menu-button:hover,
+        .menu-button:focus {
+            background-color: #21A1F1;
+            opacity: 0.6;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100%;
+            background-color: #20232A;
+            padding-top: 60px;
+            transition: 0.3s;
+            z-index: 1;
+        }
+
+        .side-menu a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 1rem;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .side-menu a:hover {
+            background-color: #575757;
+        }
+
+        .side-menu.open {
+            left: 0;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            z-index: 1000;
+            animation: fadeInOut 5s forwards;
+        }
+
+        .alert.success {
+            background-color: #4CAF50;
+        }
+
+        .alert.error {
+            background-color: #f44336;
+        }
+
+        .alert.info {
+            background-color: #2196F3;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
     </style>
 </head>
+
 <body>
     <button class="menu-button" onclick="toggleMenu()">☰ Menu</button>
     <div class="side-menu" id="sideMenu">
-        <br><br><br>
         <a href="title_generator.html" id="title-generator">Title Generator</a>
         <a href="business_idea_generator.html" id="business-idea-generator">Business Idea Generator</a>
         <a href="sales_mail_generator.html" id="sales-mail-generator">Sales Mail Generator</a>
@@ -174,42 +319,55 @@
     </div>
     <div class="container">
         <h2>Generate Delicious Recipes with Powerful AI</h2>
-        <textarea id="description" placeholder="Describe your ingredients or cuisine"></textarea>
-        <div class="button-container">
-            <button id="clear">Clear</button>
-            <button id="generate">Generate</button>  
+        <div class="input-container">
+            <input id="description" placeholder="Describe your ingredients or cuisine...">
+            <button id="generate">Generate</button>
         </div>
-        <h2 class="hidden">Generated recipes</h2>
-        <div id="output-container" class="output-container hidden">
-            <div id="spinner" class="loader hidden"></div>
+        <div class="output-container hidden" id="output-container">
+            <div class="output-header-container">
+                <h3>Generated Recipe:</h3>
+                <div class="output-header-buttons">
+                    <button id="regenerate" class="icon-button" title="Regenerate"><i class="fas fa-redo"></i></button>
+                    <button id="copy" class="icon-button" title="Copy"><i class="fas fa-copy"></i></button>
+                    <button id="download" class="icon-button" title="Download"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
+            <div class="output">
+                <p id="output"></p>
+            </div>
         </div>
+        <div class="loader hidden" id="loader"></div>
+        <div class="spinner-text hidden" id="spinner-text">Generating...</div>
     </div>
+    <div id="alert" class="alert hidden"></div>
+
     <script>
-        function setPrompt(input) {
-            return "Generate 5 delicious recipes using the following ingredients or based on the cuisine with cooking process step by step: " + input + ".";
+        function toggleMenu() {
+            const sideMenu = document.getElementById('sideMenu');
+            sideMenu.classList.toggle('open');
         }
 
         document.getElementById('generate').addEventListener('click', async () => {
-            const description = document.getElementById('description').value;
+            const description = document.getElementById('description').value.trim();
             const outputContainer = document.getElementById('output-container');
-            const h2Element = document.querySelector('h2');
-            let spinner = document.getElementById('spinner');
+            const outputElement = document.getElementById('output');
+            const loader = document.getElementById('loader');
+            const spinnerText = document.getElementById('spinner-text');
+            const alertBox = document.getElementById('alert');
 
             if (!description) {
-                alert('Please describe your ingredients or cuisine.');
+                showAlert('Please enter a description.', 'error');
                 return;
             }
 
-            const prompt = setPrompt(description);
+            outputContainer.classList.add('hidden');
+            loader.classList.remove('hidden');
+            spinnerText.classList.remove('hidden');
+
+            const prompt = `Generate 5 detailed cooking recipes based on the following description:\n\n${description}`;
+            const negativePrompt = "Do not include recipes that are too common or basic.";
 
             try {
-                // Show spinner and clear previous content
-                if (spinner) spinner.classList.remove('hidden');
-                h2Element.classList.add('hidden');
-                outputContainer.classList.remove('hidden');
-                outputContainer.innerHTML = '<div id="spinner" class="loader"></div>'; // Use loader class for animation
-                spinner = document.getElementById('spinner');
-
                 const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=AIzaSyBGOKXUnMgfNjaPyriGk4PJk5CRUdqIApk', {
                     method: 'POST',
                     headers: {
@@ -219,98 +377,92 @@
                         contents: [
                             {
                                 role: 'user',
-                                parts: [{ text: prompt }]
+                                parts: [{ text: prompt }, { text: negativePrompt }]
                             }
                         ]
                     })
                 });
 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Error: ${errorData.error.message}`);
-                }
-
                 const data = await response.json();
-                console.log('Response Data:', JSON.stringify(data, null, 2)); // Log the entire response for debugging
-
-                let generatedIdeas = ['No recipe generated'];
+                let recipe = 'No recipe generated';
 
                 if (data.candidates && Array.isArray(data.candidates)) {
-                    console.log('Candidates:', data.candidates);
                     if (data.candidates.length > 0) {
                         const firstCandidate = data.candidates[0];
-                        console.log('First Candidate:', firstCandidate);
                         if (firstCandidate.content && firstCandidate.content.parts && Array.isArray(firstCandidate.content.parts)) {
-                            console.log('Content Parts:', firstCandidate.content.parts);
                             if (firstCandidate.content.parts.length > 0) {
-                                generatedIdeas = firstCandidate.content.parts[0].text.split('\n\n'); // Split ideas by double newlines
-                            } else {
-                                console.log('No parts in content.');
+                                recipe = firstCandidate.content.parts[0].text.trim();
                             }
-                        } else {
-                            console.log('Content parts are not an array or undefined.');
                         }
-                    } else {
-                        console.log('Candidates array is empty.');
                     }
-                } else {
-                    console.log('Candidates are not an array or undefined.');
                 }
 
-                // Remove all asterisks from the generated ideas
-                generatedIdeas = generatedIdeas.map(idea => idea.replace(/\*/g, ''));
-
-                // Hide spinner and show the content
-                if (spinner) spinner.classList.add('hidden');
-                h2Element.classList.remove('hidden');
-                outputContainer.innerHTML = ''; // Clear the loader
-
-                // Display ideas
-                for (const idea of generatedIdeas) {
-                    const output = document.createElement('div');
-                    output.className = 'output';
-
-                    const p = document.createElement('p');
-                    p.textContent = idea;
-
-                    const copyButton = document.createElement('button');
-                    copyButton.className = 'copy-button';
-                    copyButton.textContent = 'Copy';
-                    copyButton.addEventListener('click', () => {
-                        const tempTextarea = document.createElement('textarea');
-                        tempTextarea.value = idea;
-                        document.body.appendChild(tempTextarea);
-                        tempTextarea.select();
-                        try {
-                            document.execCommand('copy');
-                            alert('Copied to clipboard!');
-                        } catch (err) {
-                            console.error('Error copying text: ', err);
-                            alert('Failed to copy text.');
-                        }
-                        document.body.removeChild(tempTextarea);
-                    });
-
-                    output.appendChild(p);
-                    output.appendChild(copyButton);
-                    outputContainer.appendChild(output);
+                if (recipe) {
+                    outputElement.innerHTML = recipe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    outputContainer.classList.remove('hidden');
+                } else {
+                    showAlert('Failed to generate recipe. Please try again.', 'error');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert(`An error occurred while generating the recipes: ${error.message}`);
+                console.error('Error generating recipe:', error);
+                showAlert('An error occurred. Please try again.', 'error');
+            } finally {
+                loader.classList.add('hidden');
+                spinnerText.classList.add('hidden');
             }
         });
 
-        document.getElementById('clear').addEventListener('click', () => {
-            document.getElementById('description').value = '';
-            const outputContainer = document.getElementById('output-container');
-            const h2Element = document.querySelector('h2');
-            const spinner = document.getElementById('spinner');
-            outputContainer.innerHTML = '';
-            h2Element.classList.add('hidden');
-            outputContainer.classList.add('hidden');
-            if (spinner) spinner.classList.add('hidden');
+        document.getElementById('copy').addEventListener('click', () => {
+            const outputElement = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(outputElement)
+                .then(() => showAlert('Recipe copied to clipboard!', 'success'))
+                .catch(err => showAlert('Failed to copy recipe.', 'error'));
         });
+
+        document.getElementById('download').addEventListener('click', () => {
+            const outputElement = document.getElementById('output').textContent;
+            const blob = new Blob([outputElement], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'recipe.txt';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 0);
+            showAlert('Recipe downloaded!', 'success');
+        });
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alert');
+            alertBox.textContent = message;
+            alertBox.className = `alert ${type}`;
+            alertBox.classList.remove('hidden');
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        document.getElementById('regenerate').addEventListener('click', () => {
+            document.getElementById('generate').click();
+        });
+
+        const textarea = document.getElementById('description');
+        textarea.addEventListener('input', () => {
+            textarea.style.height = 'auto';
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        });
+
+        // Load FontAwesome icons
+        (function() {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
+            document.head.appendChild(link);
+        })();
     </script>
 </body>
+
 </html>
