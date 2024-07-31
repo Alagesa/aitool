@@ -326,6 +326,20 @@
                 min-height: 3rem;
             }
         }
+
+        .food-icons-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .food-icons-container i {
+            font-size: 1rem;
+            color: #61DAFB;
+        }
     </style>
 </head>
 
@@ -340,6 +354,14 @@
     <div class="container">
         <div class="input-container">
             <h2>Generate Delicious Recipes with Powerful AI</h2>
+            <div class="food-icons-container">
+                <i class="fas fa-utensils" title="Utensils"></i>
+                <i class="fas fa-cooking-pot" title="Cooking Pot"></i>
+                <i class="fas fa-bread-slice" title="Bread"></i>
+                <i class="fas fa-carrot" title="Carrot"></i>
+                <i class="fas fa-apple-alt" title="Apple"></i>
+                <i class="fas fa-hamburger" title="Hamburger"></i>
+            </div>
             <textarea id="description" placeholder="Describe your ingredients or cuisine..."></textarea>
             <button id="generate">Generate</button>
         </div>
@@ -360,7 +382,7 @@
         <div class="spinner-text hidden" id="spinner-text">Generating...</div>
     </div>
     <div id="alert" class="alert hidden"></div>
-
+    
     <script>
         function toggleMenu() {
             const sideMenu = document.getElementById('sideMenu');
@@ -377,6 +399,23 @@
 
             if (!description) {
                 showAlert('Please enter a description.', 'error');
+                return;
+            }
+
+            // Example of additional input validation, such as checking length or specific content
+            if (description.length < 8) {  // Example check for too short descriptions
+                showAlert('Description is too short. Please provide more details.', 'error');
+                return;
+            }
+
+            // Improved keyword matching for food-related words
+            const keywords = ["ingredient", "dish", "recipe", "cuisine", "cook", "bake", "grill", "boil", "fry", "sauté", "roast", "steam", "food", "meal", "ice cream", "dessert"];
+            const descriptionLower = description.toLowerCase();
+
+            const hasFoodRelatedWord = keywords.some(keyword => descriptionLower.includes(keyword));
+
+            if (!hasFoodRelatedWord) {
+                showAlert('Please enter a food-related description.', 'error');
                 return;
             }
 
@@ -425,6 +464,13 @@
                 }
             } catch (error) {
                 console.error('Error generating recipe:', error);
+                // New error handling block for 503 status
+                if (error.response && error.response.status === 503) {
+                    showAlert('Service temporarily unavailable. Please try again later.', 'error');
+                } else {
+                    showAlert('An error occurred. Please try again.', 'error');
+                }
+
                 showAlert('An error occurred. Please try again.', 'error');
             } finally {
                 loader.classList.add('hidden');
@@ -469,7 +515,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'recipe.txt';
+            a.download = 'Recipes.txt';
             document.body.appendChild(a);
             a.click();
             setTimeout(() => {
