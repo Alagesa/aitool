@@ -18,7 +18,7 @@
             color: #ffffff;
         }
 
-        
+
 
         /* Style the input container */
         .input-container {
@@ -26,6 +26,7 @@
             padding: 1.5rem;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            margin-top: 3.5rem;
             margin-bottom: 2rem;
             text-align: center;
         }
@@ -78,12 +79,11 @@
 
         h2 {
             text-align: center;
-            margin-top: 2rem;
             font-size: 1.5rem;
             color: #61DAFB;
         }
 
-        
+
 
         /* Style the output container */
         .output-container {
@@ -338,8 +338,8 @@
         <a href="recipe_generator.html" id="recipe-generator">Recipe Generator</a>
     </div>
     <div class="container">
-        <h2>Generate Delicious Recipes with Powerful AI</h2>
         <div class="input-container">
+            <h2>Generate Delicious Recipes with Powerful AI</h2>
             <textarea id="description" placeholder="Describe your ingredients or cuisine..."></textarea>
             <button id="generate">Generate</button>
         </div>
@@ -434,10 +434,34 @@
 
         document.getElementById('copy').addEventListener('click', () => {
             const outputElement = document.getElementById('output').textContent;
-            navigator.clipboard.writeText(outputElement)
-                .then(() => showAlert('Recipe copied to clipboard!', 'success'))
-                .catch(err => showAlert('Failed to copy recipe.', 'error'));
+
+            // Create a temporary textarea element
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = outputElement;
+            tempTextarea.style.position = 'absolute';
+            tempTextarea.style.left = '-9999px';
+            document.body.appendChild(tempTextarea);
+
+            // Select the text in the textarea
+            tempTextarea.select();
+            tempTextarea.setSelectionRange(0, 99999); // For mobile devices
+
+            try {
+                // Copy the text
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showAlert('Recipe copied to clipboard!', 'success');
+                } else {
+                    throw new Error('Copy command was unsuccessful');
+                }
+            } catch (err) {
+                showAlert('Failed to copy recipe.', 'error');
+            }
+
+            // Remove the temporary textarea
+            document.body.removeChild(tempTextarea);
         });
+
 
         document.getElementById('download').addEventListener('click', () => {
             const outputElement = document.getElementById('output').textContent;
