@@ -18,11 +18,10 @@
             color: #ffffff;
         }
 
-
-
         /* Style the input container */
         .input-container {
             background: #333;
+            width: 700px;
             padding: 1.5rem;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -87,13 +86,14 @@
 
         /* Style the output container */
         .output-container {
-            position: relative;
-            background: #333;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            overflow-y: auto;
+            width: 700px;
+            margin: 0;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+
 
         .output-header-container {
             display: flex;
@@ -382,7 +382,7 @@
         <div class="spinner-text hidden" id="spinner-text">Generating...</div>
     </div>
     <div id="alert" class="alert hidden"></div>
-    
+
     <script>
         function toggleMenu() {
             const sideMenu = document.getElementById('sideMenu');
@@ -408,16 +408,66 @@
                 return;
             }
 
-            // Improved keyword matching for food-related words
-            const keywords = ["ingredient", "dish", "recipe", "cuisine", "cook", "bake", "grill", "boil", "fry", "sauté", "roast", "steam", "food", "meal", "ice cream", "dessert"];
-            const descriptionLower = description.toLowerCase();
+            // Extended list of vegetarian and non-vegetarian keywords
+            const keywords = [
+                "apple", "banana", "carrot", "broccoli", "spinach", "potato", "tomato", "cucumber", "pepper", "onion",
+                "garlic", "ginger", "cilantro", "parsley", "basil", "thyme", "rosemary", "oregano", "mint", "dill",
+                "chicken", "mutton", "gravy", "beef", "pork", "lamb", "turkey", "duck", "fish", "salmon", "tuna", "shrimp",
+                "crab", "lobster", "oyster", "scallop", "mussel", "squid", "octopus", "tofu", "tempeh", "seitan",
+                "lentil", "bean", "chickpea", "pea", "soybean", "quinoa", "rice", "barley", "oat", "wheat",
+                "bread", "pasta", "noodle", "dumpling", "tortilla", "chapati", "naan", "pancake", "waffle", "muffin",
+                "cake", "cookie", "pie", "pastry", "brownie", "cupcake", "doughnut", "croissant", "biscuit", "scone",
+                "yogurt", "cheese", "butter", "milk", "cream", "egg", "mayonnaise", "sour cream", "cottage cheese", "feta",
+                "parmesan", "mozzarella", "cheddar", "gouda", "brie", "blue cheese", "camembert", "goat cheese", "ricotta", "halloumi",
+                "chili", "curry", "stew", "soup", "salad", "sandwich", "burger", "pizza", "taco", "burrito",
+                "wrap", "sushi", "tempura", "teriyaki", "sashimi", "ramen", "pho", "dim sum", "dumplings", "spring roll",
+                "egg roll", "falafel", "hummus", "tahini", "guacamole", "salsa", "tzatziki", "tabbouleh", "ratatouille", "gazpacho",
+                "paella", "risotto", "gnocchi", "frittata", "quiche", "omelette", "souffle", "ratatouille", "fondue", "tartare",
+                "ceviche", "bruschetta", "caprese", "antipasto", "meatball", "sausage", "bacon", "ham", "prosciutto", "salami",
+                "pepperoni", "chorizo", "pancetta", "lardons", "pate", "foie gras", "confit", "terrine", "rillette", "saucisson",
+                "schnitzel", "wiener", "knockwurst", "bratwurst", "currywurst", "andouille", "boudin", "merguez", "tasso", "pepperoni",
+                "vegetable", "fruit", "meat", "poultry", "seafood", "grain", "nut", "seed", "legume", "dairy",
+                "spice", "herb", "condiment", "sauce", "seasoning", "flavor", "sweet", "sour", "bitter", "salty",
+                "umami", "savory", "baked", "grilled", "roasted", "fried", "boiled", "steamed", "poached", "sautéed",
+                "braised", "stewed", "blanched", "pickled", "fermented", "smoked", "dried", "canned", "fresh", "frozen",
+                "organic", "gluten-free", "vegan", "vegetarian", "paleo", "keto", "low-carb", "low-fat", "high-protein", "low-sodium",
+                "spicy", "mild", "tangy", "creamy", "crunchy", "crispy", "tender", "juicy", "marinated", "rubbed",
+                "seasoned", "stuffed", "filled", "wrapped", "topped", "garnished", "drizzled", "dipped", "spread", "layered",
+                "simmered", "boiled", "stewed", "braised", "sauteed", "seared", "griddled", "broiled", "baked", "roasted",
+                "smoked", "cured", "marinated", "pickled", "fermented", "candied", "caramelized", "glazed", "breaded", "battered",
+                "frosted", "iced", "whipped", "pureed", "mashed", "blended", "chopped", "sliced", "diced", "minced",
+                "shredded", "grated", "crushed", "peeled", "cored", "seeded", "juiced", "zested", "halved", "quartered",
+                "cubed", "julienned", "ribboned", "spiralized", "shaved", "torn", "crumbled", "toasted", "browned", "braised",
+                "poached", "seared", "simmered", "fried", "deep-fried", "stir-fried", "pan-fried", "pan-seared", "pan-roasted", "oven-roasted",
+                "oven-baked", "oven-broiled", "grilled", "barbecued", "smoked", "rotisseried", "basted", "marinated", "brined", "pickled",
+                "fermented", "cured", "candied", "glazed", "sauced", "stuffed", "filled", "layered", "folded", "wrapped",
+                "drizzled", "sprinkled", "garnished", "topped", "dusted", "showered", "shaved", "spooned", "spread", "swirled",
+                "layered", "whisked", "beaten", "whipped", "folded", "stirred", "blended", "mixed", "combined", "incorporated",
+                "kneaded", "rolled", "pounded", "mashed", "crushed", "pressed", "squeezed", "juiced", "zested", "peeled",
+                "cored", "seeded", "halved", "quartered", "cubed", "diced", "chopped", "minced", "shredded", "grated",
+                "crumbled", "sliced", "ribboned", "julienned", "spiralized", "shaved", "shredded", "chunked", "pulled", "flaked",
+                "poached", "simmered", "boiled", "blanched", "parboiled", "steamed", "roasted", "baked", "broiled", "grilled",
+                "barbecued", "braised", "stewed", "fried", "deep-fried", "stir-fried", "pan-fried", "pan-seared", "pan-roasted", "oven-roasted",
+                "oven-baked", "oven-broiled", "griddled", "smoked", "cured", "marinated", "brined", "pickled", "fermented", "candied",
+                "caramelized", "glazed", "stuffed", "filled", "topped", "garnished", "drizzled", "dusted", "sprinkled", "showered"
+            ];
+            const minDescriptionLength = 10;  // Minimum length for a valid description
 
-            const hasFoodRelatedWord = keywords.some(keyword => descriptionLower.includes(keyword));
 
-            if (!hasFoodRelatedWord) {
-                showAlert('Please enter a food-related description.', 'error');
-                return;
+            function validateDescription(description) {
+                const descriptionWords = description.toLowerCase().split(' ');
+                const hasFoodRelatedWord = descriptionWords.some(word => keywords.includes(word));
+                return hasFoodRelatedWord;
             }
+
+            document.getElementById('generate').addEventListener('click', () => {
+                const description = document.getElementById('description').value.trim();
+                if (validateDescription(description)) {
+                    // Proceed with generating recipes
+                } else {
+                    showAlert('Please enter a food-related description.', 'error');
+                }
+            });
 
             outputContainer.classList.add('hidden');
             loader.classList.remove('hidden');
