@@ -451,23 +451,16 @@
                 "oven-baked", "oven-broiled", "griddled", "smoked", "cured", "marinated", "brined", "pickled", "fermented", "candied",
                 "caramelized", "glazed", "stuffed", "filled", "topped", "garnished", "drizzled", "dusted", "sprinkled", "showered"
             ];
-            const minDescriptionLength = 10;  // Minimum length for a valid description
+
+            const descriptionWords = description.toLowerCase().split(' ');
+            const keywordsSet = new Set(keywords);
+            const hasFoodRelatedWord = descriptionWords.some(word => keywordsSet.has(word));
 
 
-            function validateDescription(description) {
-                const descriptionWords = description.toLowerCase().split(' ');
-                const hasFoodRelatedWord = descriptionWords.some(word => keywords.includes(word));
-                return hasFoodRelatedWord;
+            if (!hasFoodRelatedWord) {
+                showAlert('Please enter a food-related description.', 'error');
+                return;
             }
-
-            document.getElementById('generate').addEventListener('click', () => {
-                const description = document.getElementById('description').value.trim();
-                if (validateDescription(description)) {
-                    // Proceed with generating recipes
-                } else {
-                    showAlert('Please enter a food-related description.', 'error');
-                }
-            });
 
             outputContainer.classList.add('hidden');
             loader.classList.remove('hidden');
